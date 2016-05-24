@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>xml</title>
+    <script src="js/jquery-2.2.2.min.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/bootstrap.min.js"></script>
+		<link href="css/bootstrap.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/client.js"></script>
+</head>
+<body>
+    <div class="container">
+        <div class="panel panel-default">
+        <div class="panel-heading">Список</div>
+            <table class="table">
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Value</th>
+                    <th>Delete</th>
+                </tr>
+                <tbody id="mainTable">
+                    {form}
+                </tbody>
+            </table>
+        </div>
+    	<div class="panel panel-info addpanel">
+            <div class="panel-heading">Добавить еще объект</div>
+            <div class="panel-body">
+                <div class="input-group addpanel">
+                  <span class="input-group-addon">Name</span>
+                  <input type="text" class="form-control" placeholder="Name" id="Name">
+                </div>
+                <div class="input-group addpanel">
+                  <span class="input-group-addon">Title</span>
+                  <input type="text" class="form-control" placeholder="Title" id="Title">
+                </div>
+                <div class="input-group addpanel">
+                  <span class="input-group-addon">Type</span>
+                	<select id="Type" class="input-large form-control">
+                		<option>System.String</option>
+                		<option>System.Int32</option>
+                		<option>System.Boolean</option>
+                	</select>
+                </div>
+                <button type="button" class="btn btn-success addpanel" id="add"><span class="glyphicon glyphicon-plus" style="margin-right: 10px;"></span>Add</button>
+                <button type="button" class="btn btn-info addpanel" id="submit"><span class="glyphicon glyphicon-ok" style="margin-right: 10px;"></span>Submit</button>
+                <button type="button" class="btn btn-warning addpanel" style="float:right;" id="download"><span class="glyphicon glyphicon-download-alt" style="margin-right: 10px;"></span>Download</button>
+                <button type="button" class="btn btn-danger addpanel file-upload" style="float:right;" id="Upload">
+
+                    <span class="glyphicon glyphicon-cloud-upload" style="margin-right: 10px;"></span>
+                    <form method="post" action="./upload" id="upload_form" style="display:inline-block;" enctype =  "multipart/form-data">
+                        <input type="file" class="file-input" id="upload_input" name="input_xml" accept="xml"/>
+                    </form>
+
+                Upload</button>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>
