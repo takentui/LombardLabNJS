@@ -8,13 +8,28 @@
 	<script src="js/bootstrap.min.js"></script>
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css">
-	<script src="js/client.js"></script>
+	<script src="js/table.js"></script>
 </head>
+<style>
+
+.delete-btn {
+    cursor: pointer;
+}
+body {
+    background-image: url('img/lombard-bg.jpg')
+}
+.container {
+    background-color: white;
+}
+</style>
+
+
 
 <body>
 
 <?php
 //phpinfo();
+echo "<div class=\"container\" id=\"main-content\"></div>";
 	if (isset($_REQUEST['username']) and isset($_REQUEST['userpass']))
 	{
 		$username = $_REQUEST['username'];
@@ -24,15 +39,22 @@
 			session_start();
 			$_SESSION['username'] = $username;
 			$_SESSION['userpass'] = $userpass;
-            echo "<div class=\"container\" id=\"main-content\"></div>";
+
 		}
 		else {
-			echo "<H4> Пароль или логин введен неверно !</H4>";
+			echo '<div class="alert alert-danger" style="display: none;" id="alert-danger">strong>Внимание!</strong><div id="alert-danger-text">Пароль или логин введен неверно !</div><div>';
 		}
 	}
-	echo "<H3> <a href=start.php>Назад</a></H3></p>";
 
 
 ?>
+
+<div class="alert alert-success" style="display: none;" id="alert-success">
+  <strong>Поздравляем!</strong>
+  <div id="alert-success-text"></div>
+</div>
+<div class="alert alert-danger" style="display: none;" id="alert-danger">
+  <strong>Внимание!</strong><div id="alert-danger-text"></div>
+</div>
 </body>
 </html>

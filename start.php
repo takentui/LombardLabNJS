@@ -7,11 +7,12 @@
 		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/bootstrap.min.js"></script>
 		<link href="css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/style.css">
 </head>
 <style>
-    body {
-        background-image: url('img/lombard-bg.jpg')
-    }
+body {
+    background-image: url('img/lombard-bg.jpg')
+}
 </style>
 <body>
     <script>
@@ -40,12 +41,12 @@
                   </div>
                   <div class="form-group">
                     <label for="userpass">Password</label>
-                    <input type="userpass" class="form-control" id="userpass" placeholder="Password">
+                    <input type="password" class="form-control" id="userpass" placeholder="Password">
                   </div>
                 </form>
               </div>
               <div class="modal-footer">
-                 <button type="button" class="btn btn-primary">Login</button>
+                 <button type="button" class="btn btn-primary" id="login">Login</button>
               </div>
             </div>
           </div>
