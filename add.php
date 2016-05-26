@@ -24,7 +24,7 @@ $q="insert into [MKB].[WUD\Solovev4].[".$_GET['table']."] ($fields) values ($val
 
 try {
     $result= mssql_query($q) or die("Ошибка при добавлении записи в таблицу ".$_SESSION['table'].": ".mssql_get_last_message());
-    json_encode(result);
+    json_encode($result);
 }
 catch (Exception $e) {
     echo json_encode($e);

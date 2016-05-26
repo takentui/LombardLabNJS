@@ -1,6 +1,6 @@
 var TABLE_MODULE = (function() {
     var self = {
-        curTable: "clients",
+        curTable: "table",
         columns: [{
             id: 'id-1',
             name: "COLUMN1",
@@ -12,7 +12,7 @@ var TABLE_MODULE = (function() {
         },{
             id: 'id-3',
             name: "COLUMN3",
-            type: "id",
+            type: "dropdown",
             foreignTable: "foreignTable" //РўР°Р±Р»РёС†Р° РёР· РєРѕС‚РѕСЂРѕР№ РїРѕС‚СЏРЅРµРј РґСЂРѕРїРґР°СѓРЅ
         }],
 
@@ -26,19 +26,18 @@ var TABLE_MODULE = (function() {
             "id-1": "First-text",
             "id-2": "203",
             "id-3": "15"
-        }]
+        }],
+        dropdown: {}
 
     };
 
     self.init = function() {
-        self.printTable();
-        self.initBtns();
+        self.loadTable();
 
     };
 
     self.initBtns = function() {
         $(".delete-btn").unbind('click');
-
         $(".delete-btn").on('click', function() {
             var id = $(this).attr('data-record');
             self.deleteRecord(id);
@@ -60,15 +59,15 @@ var TABLE_MODULE = (function() {
             html += "<tr>";
             for(var j = 0; j < self.columns.length; j++) {
                 html += "<td>";
-                switch ( self.columns[i].type) {
+                switch ( self.columns[j].type) {
                     case "text":
-                            html += self.TextField(self.data[i].id, self.columns[i].id, self.data[i][self.columns[i].id]);
+                            html += self.TextField(self.data[i].id, self.columns[j].id, self.data[i][self.columns[j].id]);
                         break;
                     case "number":
-                            html += self.IntField(self.data[i].id, self.columns[i].id, self.data[i][self.columns[i].id]);
+                            html += self.IntField(self.data[i].id, self.columns[j].id, self.data[i][self.columns[j].id]);
                         break;
-                    case "number":
-                            html += self.IntField(self.data[i].id, self.columns[i].id, self.data[i].foreignTable);
+                    case "dropdown":
+                            html += self.DropDownField(self.data[i].id, self.columns[j].id, self.data[i][self.columns[j].id], self.columns[j].foreignTable);
                         break;
                     }
                 html += "</td>";
@@ -78,6 +77,7 @@ var TABLE_MODULE = (function() {
         }
         html += "</tr>";
         $("#main-content").html(html);
+        self.initBtns();
     };
 
     self.addRecord = function(id) {
@@ -127,12 +127,62 @@ var TABLE_MODULE = (function() {
 
     self.DropDownField = function(id, field_id, value, table) {
         var html = "<select class='field' data-record='" + id + "' data-field='" + field_id + "' value='"+ value +"' >";
-        for(var i = 0; i < self.dropdown[table].records; i++) {
-            html += "<option value='"+ data.records[i].value +"'>" + data.records[i].name + "</option>";
+        var selected = "";
+        for(var i = 0; i < self.dropdown[table].records.length; i++) {
+            data = self.dropdown[table];
+            selected = data.records[i].id == value ? "selected" : "";
+            html += "<option value='"+ data.records[i].id +"' " + selected + " >" + data.records[i].name + "</option>";
         }
         html += "</select>"
         return html;
     }
+
+    self.loadTable = function() {
+        $.ajax({
+            type: 'POST',
+            dataType: "json",
+            url: 'load.php?',
+            data: { table : self.curTable, searchstring: $("#searchstring").val(), searchcolumn: $("#searchcolumn").val() },
+            success: function(data) {
+                if ( data != undefined ) {
+                    self.columns = data.columns;
+                    self.data = data.records;
+                    self.loadForeignTables();
+                }
+            },
+            error: function(data) {
+                self.showDanger("Ошибка загрузки сторонней таблицы " + data.message);
+            }
+
+        });
+    };
+
+    self.loadForeignTables = function() {
+        self.dropdown = {};
+        for(var j = 0; j < self.columns.length; j++) {
+            if (self.columns[j].type == "dropdown") {
+                $.ajax({
+                    type: 'POST',
+                    dataType: "json",
+                    url: 'loadForeignTable.php?' ,
+                    data: { table : self.columns[j].foreignTable},
+                    success: function(data) {
+                        self.dropdown[data.table] = {};
+                        self.dropdown[data.table].records = data.records;
+                        setTimeout(function() {self.printTable();}, 1000);
+
+                    },
+                    error: function(data) {
+                        self.showDanger("Ошибка загрузки сторонней таблицы " + data.message);
+                    }
+
+                });
+
+            }
+        }
+
+    };
+
 
     self.showSuccess = function(message) {
         $("#alert-success-text").html(message);
